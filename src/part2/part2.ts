@@ -39,12 +39,12 @@ const f1: (str: string) => string[] = (str: string) =>
 const f2: (arr: string[]) => string[] = (arr: string[]) =>
   R.map((x: string) => x.charAt(0) + x.length.toString(), arr);
 
-//[ 'aaaa', 'bbb', 'cc', 'd' ] ==> a4b3c2d1
+//[ 'a4', 'b3', 'c2', 'd1' ] ==> a4b3c2d1
 const f3: (arr: string[]) => string = (arr: string[]) => R.join("", arr);
 
 export const runLengthEncoding: (str: string) => string = R.pipe(f1, f2, f3);
 
-console.log(runLengthEncoding("aaaabbbccd"));
+// console.log(runLengthEncoding("aaaabbbccd"));
 
 /* Question 3 */
 /*
