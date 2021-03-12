@@ -1,1 +1,11 @@
-# ppl_project_1
+## ppl_project_1 -  Fun with TypeScript
+This project was made to graduate from Ben Gurion University and   
+actually works on a real programming project :)   
+
+
+### Read before running:  
+run 'npm i' in terminal  
+
+A visual illustration of learning typescript:  
+![alt text](https://media.giphy.com/media/FIxjQGnjmNt5u/giphy.gif)  
+
