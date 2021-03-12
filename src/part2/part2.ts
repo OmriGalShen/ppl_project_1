@@ -17,7 +17,7 @@ export const countVowels: (str: string) => number = (str: string) =>
   R.filter(checkVowel, stringToArray(str)).length;
 
 const checkVowel: (ch: string) => boolean = (ch: string) => {
-  const vowelList = ["a", "e", "i", "o", "u"];
+  const vowelList: string[] = ["a", "e", "i", "o", "u"];
   return vowelList.includes(ch.toLowerCase());
 };
 
@@ -53,4 +53,14 @@ export const runLengthEncoding: (str: string) => string = R.pipe(f1, f2, f3);
     isPaired("This is ([some]) {text}"); // ==> true
     isPaired("This is ]some[ (text)"); // ==> false
 */
+
+const parentheses = [ ["{", "}"], ["(", ")"], ["[", "]"] ];
+
+// const h1 : (str: string) => string[] = 
+//     (str: string) =>
+//     R.filter(
+//       (ch: string) => R.chain().conteins(ch),
+//       stringToArray(str)
+//     ));
+
 export const isPaired = undefined;
