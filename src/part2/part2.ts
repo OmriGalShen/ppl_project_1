@@ -18,7 +18,7 @@ export const countVowels: (str: string) => number = (str: string) =>
 
 const checkVowel: (ch: string) => boolean = (ch: string) => {
   const vowelList: string[] = ["a", "e", "i", "o", "u"];
-  return vowelList.includes(ch.toLowerCase());
+  return R.indexOf(ch.toLowerCase(), vowelList) !== -1;
 };
 
 // console.log(countVowels("This is SOME Text"));
@@ -32,17 +32,22 @@ const checkVowel: (ch: string) => boolean = (ch: string) => {
 */
 
 //"aaaabbbccd"==> [ 'aaaa', 'bbb', 'cc', 'd' ]
-const f1: (str: string) => string[] = (str: string) =>
+const groupConsecutive: (str: string) => string[] = (str: string) =>
   R.groupWith(R.equals, str);
 
 //[ 'aaaa', 'bbb', 'cc', 'd' ] ==> [ 'a4', 'b3', 'c2', 'd1' ]
-const f2: (arr: string[]) => string[] = (arr: string[]) =>
+const addCount: (arr: string[]) => string[] = (arr: string[]) =>
   R.map((x: string) => x.charAt(0) + x.length.toString(), arr);
 
 //[ 'a4', 'b3', 'c2', 'd1' ] ==> a4b3c2d1
-const f3: (arr: string[]) => string = (arr: string[]) => R.join("", arr);
+const arrToString: (arr: string[]) => string = (arr: string[]) =>
+  R.join("", arr);
 
-export const runLengthEncoding: (str: string) => string = R.pipe(f1, f2, f3);
+export const runLengthEncoding: (str: string) => string = R.pipe(
+  groupConsecutive,
+  addCount,
+  arrToString
+);
 
 // console.log(runLengthEncoding("aaaabbbccd"));
 
@@ -78,16 +83,16 @@ const onlyPera: (str: string) => string[] = (str: string) =>
 const isValid: (arr: string[]) => boolean = (arr: string[]) =>
   R.reduce(
     (acc: string[], curr: string) =>
-      isOpen(curr) && !hasClosing(acc, curr)
-        ? R.tail(acc.concat(curr)) // add curr to the end of acc
+      isOpen(curr) && !hasClosing(acc, curr) // invalid: open character without closing
+        ? R.tail(acc.concat("")) // acc length stays the same
         : R.tail(acc), //acc length reduced by 1
     arr,
     arr
-  ).length === 0;
+  ).length === 0; // all the characters were valid
 
 export const isPaired: (str: string) => boolean = R.pipe(onlyPera, isValid);
 
-console.log(isPaired("This is ([some]) {text}")); //true
-console.log(isPaired("This is ]some[ (text)")); //false
-console.log(isPaired("")); // true
-console.log(isPaired("This is (]som")); //false
+// console.log(isPaired("This is ([some]) {text}")); //true
+// console.log(isPaired("This is ]some[ (text)")); //false
+// console.log(isPaired("")); // true
+// console.log(isPaired("This is (]som")); //false
