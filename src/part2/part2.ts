@@ -63,26 +63,31 @@ const isPera: (ch: string) => boolean = (ch: string) =>
   R.indexOf(ch, Object.values(parentheses)) != -1;
 
 const isOpen: (ch: string) => boolean = (ch: string) =>
-  Object.keys(parentheses).includes(ch);
+  R.indexOf(ch, Object.keys(parentheses)) !== -1;
+
+const hasClosing: (arr: string[], ch: string) => boolean = (
+  arr: string[],
+  ch: string
+) => R.indexOf(parentheses[ch], arr) !== -1;
 
 // "This is ([some]) {text}" ==> [ '(', '[', ']', ')', '{', '}' ]
-const h1: (str: string) => string[] = (str: string) =>
+const onlyPera: (str: string) => string[] = (str: string) =>
   R.filter((ch: string) => isPera(ch), stringToArray(str));
 
 // [ '(', '[', ']', ')', '{', '}' ] ==> true
-const h2: (arr: string[]) => boolean = (arr: string[]) =>
+const isValid: (arr: string[]) => boolean = (arr: string[]) =>
   R.reduce(
     (acc: string[], curr: string) =>
-      isOpen(curr) && !acc.includes(parentheses[curr])
-        ? R.tail(acc.concat(curr))
-        : R.tail(acc),
+      isOpen(curr) && !hasClosing(acc, curr)
+        ? R.tail(acc.concat(curr)) // add curr to the end of acc
+        : R.tail(acc), //acc length reduced by 1
     arr,
     arr
   ).length === 0;
 
-export const isPaired: (str: string) => boolean = R.pipe(h1, h2);
+export const isPaired: (str: string) => boolean = R.pipe(onlyPera, isValid);
 
-// console.log(isPaired("This is ([some]) {text}")); //true
-// console.log(isPaired("This is ]some[ (text)")); //false
-// console.log(isPaired("")); // true
-// console.log(isPaired("This is (]som")); //false
+console.log(isPaired("This is ([some]) {text}")); //true
+console.log(isPaired("This is ]some[ (text)")); //false
+console.log(isPaired("")); // true
+console.log(isPaired("This is (]som")); //false
