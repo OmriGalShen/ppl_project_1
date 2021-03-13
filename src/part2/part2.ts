@@ -54,13 +54,35 @@ export const runLengthEncoding: (str: string) => string = R.pipe(f1, f2, f3);
     isPaired("This is ]some[ (text)"); // ==> false
 */
 
-const parentheses = [ ["{", "}"], ["(", ")"], ["[", "]"] ];
+type Parentheses = Record<string, string>;
 
-// const h1 : (str: string) => string[] = 
-//     (str: string) =>
-//     R.filter(
-//       (ch: string) => R.chain().conteins(ch),
-//       stringToArray(str)
-//     ));
+const parentheses: Parentheses = { "{": "}", "(": ")", "[": "]" };
 
-export const isPaired = undefined;
+const isPera: (ch: string) => boolean = (ch: string) =>
+  R.indexOf(ch, Object.keys(parentheses)) != -1 ||
+  R.indexOf(ch, Object.values(parentheses)) != -1;
+
+const isOpen: (ch: string) => boolean = (ch: string) =>
+  Object.keys(parentheses).includes(ch);
+
+// "This is ([some]) {text}" ==> [ '(', '[', ']', ')', '{', '}' ]
+const h1: (str: string) => string[] = (str: string) =>
+  R.filter((ch: string) => isPera(ch), stringToArray(str));
+
+// [ '(', '[', ']', ')', '{', '}' ] ==> true
+const h2: (arr: string[]) => boolean = (arr: string[]) =>
+  R.reduce(
+    (acc: string[], curr: string) =>
+      isOpen(curr) && !acc.includes(parentheses[curr])
+        ? R.tail(acc.concat(curr))
+        : R.tail(acc),
+    arr,
+    arr
+  ).length === 0;
+
+export const isPaired: (str: string) => boolean = R.pipe(h1, h2);
+
+// console.log(isPaired("This is ([some]) {text}")); //true
+// console.log(isPaired("This is ]some[ (text)")); //false
+// console.log(isPaired("")); // true
+// console.log(isPaired("This is (]som")); //false
