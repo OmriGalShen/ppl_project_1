@@ -37,7 +37,11 @@ const groupConsecutive: (str: string) => string[] = (str: string) =>
 
 //[ 'aaaa', 'bbb', 'cc', 'd' ] ==> [ 'a4', 'b3', 'c2', 'd1' ]
 const addCount: (arr: string[]) => string[] = (arr: string[]) =>
-  R.map((x: string) => x.charAt(0) + x.length.toString(), arr);
+  R.map(
+    (x: string) =>
+      x.length > 1 ? x.charAt(0) + x.length.toString() : x.charAt(0),
+    arr
+  );
 
 //[ 'a4', 'b3', 'c2', 'd1' ] ==> a4b3c2d1
 const arrToString: (arr: string[]) => string = (arr: string[]) =>
