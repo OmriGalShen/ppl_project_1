@@ -21,8 +21,6 @@ const checkVowel: (ch: string) => boolean = (ch: string) => {
   return R.indexOf(ch.toLowerCase(), vowelList) !== -1;
 };
 
-// console.log(countVowels("This is SOME Text"));
-
 /* Question 2 */
 /*
     Write a function runLengthEncoding which takes a string as input and returns a “compressed” version of
@@ -52,8 +50,6 @@ export const runLengthEncoding: (str: string) => string = R.pipe(
   addCount,
   arrToString
 );
-
-// console.log(runLengthEncoding("aaaabbbccd"));
 
 /* Question 3 */
 /*
@@ -95,8 +91,3 @@ const isValid: (arr: string[]) => boolean = (arr: string[]) =>
   ).length === 0; // all the characters were valid
 
 export const isPaired: (str: string) => boolean = R.pipe(onlyPera, isValid);
-
-// console.log(isPaired("This is ([some]) {text}")); //true
-// console.log(isPaired("This is ]some[ (text)")); //false
-// console.log(isPaired("")); // true
-// console.log(isPaired("This is (]som")); //false
