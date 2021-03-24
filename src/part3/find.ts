@@ -11,7 +11,7 @@ const findOrThrow = <T>(pred: (x: T) => boolean, a: T[]): T => {
 export const findResult = <T>(pred: (x: T) => boolean, a: T[]): Result<T> => {
   const res = a.filter(pred);
   if (res.length > 0) return makeOk(res[0]);
-  return makeFailure("");
+  return makeFailure("No element found.");
 };
 
 /* Client code */
@@ -32,8 +32,9 @@ export const returnSquaredIfFoundEven_v2 = (a: number[]): Result<number> => {
 };
 
 export const returnSquaredIfFoundEven_v3 = (a: number[]): number => {
-    return either(findResult((x) => x % 2 === 0, a),
-    (x: number) => x*x,
-    (message:string)=> -1
-    )
-}
+  return either(
+    findResult((x) => x % 2 === 0, a),
+    (x: number) => x * x,
+    (message: string) => -1
+  );
+};
