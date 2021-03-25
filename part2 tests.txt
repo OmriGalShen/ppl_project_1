@@ -1,0 +1,17 @@
+const runTest = (str: string, expected: boolean) => {
+  if (isPaired(str) === expected) console.log("Passed");
+  else console.log("Failed!!!!");
+};
+
+runTest("((()()))", true);
+runTest("((()()))", true);
+runTest("This is ([some]) {text}", true);
+runTest("[({})]", true);
+runTest("[](){}", true);
+runTest("((()())", false);
+runTest("[{]}", false);
+runTest("This is ]some[ (text)", false);
+runTest("()))", false);
+runTest("a[{bbb()}]", true);
+runTest("a[{bbb(})]", false);
+runTest("[g(g])", false);
