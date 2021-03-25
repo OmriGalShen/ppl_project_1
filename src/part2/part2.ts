@@ -59,35 +59,28 @@ export const runLengthEncoding: (str: string) => string = R.pipe(
     isPaired("This is ]some[ (text)"); // ==> false
 */
 
-type Parentheses = Record<string, string>;
-
-const parentheses: Parentheses = { "{": "}", "(": ")", "[": "]" };
+const parentheses: string = "{}()[]";
 
 const isPera: (ch: string) => boolean = (ch: string) =>
-  R.indexOf(ch, Object.keys(parentheses)) != -1 ||
-  R.indexOf(ch, Object.values(parentheses)) != -1;
-
-const isOpen: (ch: string) => boolean = (ch: string) =>
-  R.indexOf(ch, Object.keys(parentheses)) !== -1;
-
-const hasClosing: (arr: string[], ch: string) => boolean = (
-  arr: string[],
-  ch: string
-) => R.indexOf(parentheses[ch], arr) !== -1;
+  parentheses.indexOf(ch) !== -1;
 
 // "This is ([some]) {text}" ==> [ '(', '[', ']', ')', '{', '}' ]
 const onlyPera: (str: string) => string[] = (str: string) =>
   R.filter((ch: string) => isPera(ch), stringToArray(str));
 
-// [ '(', '[', ']', ')', '{', '}' ] ==> true
-const isValid: (arr: string[]) => boolean = (arr: string[]) =>
-  R.reduce(
-    (acc: string[], curr: string) =>
-      isOpen(curr) && !hasClosing(acc, curr) // invalid: open character without closing
-        ? R.tail(acc.concat("")) // acc length stays the same
-        : R.tail(acc), //acc length reduced by 1
-    arr,
-    arr
-  ).length === 0; // all the characters were valid
+const isValid: (arr: string[]) => boolean = (arr: string[]) => {
+  if (arr.length % 2 !== 0) return false;
+  if (arr.length == 0) return true;
+  const pair1 = R.join("", arr).indexOf("()");
+  const pair2 = R.join("", arr).indexOf("[]");
+  const pair3 = R.join("", arr).indexOf("{}");
+  if (pair1 === -1 && pair2 === -1 && pair3 === -1) return false;
+  if (pair1 !== -1 && !isValid(R.remove(pair1, 2, arr))) return false;
+  if (pair2 !== -1 && !isValid(R.remove(pair2, 2, arr))) return false;
+  if (pair3 !== -1 && !isValid(R.remove(pair3, 2, arr))) return false;
+  return true;
+};
 
 export const isPaired: (str: string) => boolean = R.pipe(onlyPera, isValid);
+
+
